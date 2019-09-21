@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
-const auth = require('./auth.json');
+const secretToken = process.env.DISCORD_BOT_SECRET; //This must be kept secret and is stored using an ignored ".env" file
 
 client.on('ready', () => {
     console.log("I AM HERE!");
@@ -18,7 +18,7 @@ client.on('message', msg => {
   })
 
 //Logs the Bot into Discord using the Bot's authorization token/login
-client.login(auth.token);
+client.login(secretToken);
 
 //Use 'npm start' in the terminal sto start the application (The Bot will appear online and send a message to the console)
 //Use 'ctrl + c' to stop running the program! Or else you'll run multiple instances of the script!
