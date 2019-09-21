@@ -1,0 +1,17 @@
+{
+  "name": "bot-of-culture",
+  "version": "1.0.0",
+  "description": "A cultured bot curated for the Men of Culture Discord Server",
+  "main": "bot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node bot.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^11.5.1",
+    "request": "2.81.0"
+  }
+}
