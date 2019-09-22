@@ -9,9 +9,11 @@ client.on('ready', () => {
 
 //On message receipt
 client.on('message', msg => {
+    //Convert to lowercase to ignore case formatting
+    msg = msg.toString().toLowerCase();
     //If the message didn't come from the bot...
     if (msg.author.id != client.user.id) {
-      if (msg.content === '!Ping'){
+      if (msg.content === '!ping'){
         msg.reply('Pong');
       }
     }
@@ -22,3 +24,5 @@ client.login(secretToken);
 
 //Use 'npm start' in the terminal sto start the application (The Bot will appear online and send a message to the console)
 //Use 'ctrl + c' to stop running the program! Or else you'll run multiple instances of the script!
+
+// TODO: Add feature that allows scheduling/entering events, and commands to retrieve event information such as guests, data, location
