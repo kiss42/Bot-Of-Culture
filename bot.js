@@ -9,12 +9,7 @@ client.on('ready', () => {
 
 //On message receipt
 client.on('message', msg => {
-<<<<<<< HEAD
      //All commands will start with an uppercase character
-=======
-    //Convert to lowercase to ignore case formatting
-    msg = msg.toString().toLowerCase();
->>>>>>> master
     //If the message didn't come from the bot...
     if (msg.author.id != client.user.id) {
       if (msg.content === '!ping'){
