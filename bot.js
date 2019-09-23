@@ -9,6 +9,7 @@ client.on('ready', () => {
 
 //On message receipt
 client.on('message', msg => {
+     //All commands will start with an uppercase character
     //If the message didn't come from the bot...
     if (msg.author.id != client.user.id) {
       if (msg.content === '!Ping'){
