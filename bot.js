@@ -2,18 +2,25 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 const secretToken = process.env.DISCORD_BOT_SECRET; //This must be kept secret and is stored using an ignored ".env" file
 
+/**
+ * The ready event is vital, it means that only _after_ this will your bot start reacting to information
+ * received from Discord
+ */
 client.on('ready', () => {
     console.log("I AM HERE!");
      console.log(`${client.user.username} reporting for duty!`);
 });
 
-//On message receipt
+//An event listener for messages
 client.on('message', msg => {
     //All commands will start with an uppercase character
     //If the message didn't come from the bot...
     if (msg.author.id != client.user.id) {
-      if (msg.content === '!Ping'){
-        msg.reply('Pong');
+      if (msg.content === '!ping'){
+        msg.reply('pong');
+      }
+      if (msg.content === '!vic'){
+        msg.reply('GUUUUUUIIIILTYYYYYYYY!');
       }
     }
   })
