@@ -2,28 +2,39 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 const secretToken = process.env.DISCORD_BOT_SECRET; //This must be kept secret and is stored using an ignored ".env" file
 
+//Prefix that precedes a command
+const PREFIX = "!";
+
 /**
  * The ready event is vital, it means that only _after_ this will your bot start reacting to information
  * received from Discord
  */
 client.on('ready', () => {
     console.log("I AM HERE!");
-     console.log(`${client.user.username} reporting for duty!`);
+    console.log(`${client.user.username} reporting for duty!`);
 });
 
 //An event listener for messages
 client.on('message', msg => {
-    //All commands will start with an uppercase character
+   
+    let args = message.content.substring(PREFIX.length).split(" ");
+
     //If the message didn't come from the bot...
     if (msg.author.id != client.user.id) {
-      if (msg.content === '!ping'){
-        msg.reply('pong');
-      }
-      if (msg.content === '!vic'){
-        msg.channel.send('GUUUUUUIIIILTYYYYYYYY!');
-      }
+        //Switch instructions based on given command
+        switch(args[0]){
+            case 'ping':
+                msg.reply("ping!")
+                break;
+            case 'vic':
+                msg.channel.send("GUUUUUUUIIIILTYYYYYY!");
+                break;
+            default:
+                msg.channel.send("I don't even know what that means.");
+                break;
+        }
     }
-  })
+});
 
 //Logs the Bot into Discord using the Bot's authorization token/login
 client.login(secretToken);
