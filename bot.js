@@ -20,7 +20,7 @@ client.on('message', msg => {
         msg.reply('pong');
       }
       if (msg.content === '!vic'){
-        msg.reply('GUUUUUUIIIILTYYYYYYYY!');
+        msg.channel.send('GUUUUUUIIIILTYYYYYYYY!');
       }
     }
   })
