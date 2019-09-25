@@ -30,7 +30,6 @@ client.on('message', msg => {
                 msg.channel.send("GUUUUUUUIIIILTYYYYYY!");
                 break;
             default:
-                msg.channel.send("I don't even know what that means.");
                 break;
         }
     }
