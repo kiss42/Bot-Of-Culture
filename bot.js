@@ -24,7 +24,7 @@ client.on('message', msg => {
         //Switch instructions based on given command
         switch(args[0]){
             case 'ping':
-                msg.reply("ping!")
+                msg.reply("pong!")
                 break;
             case 'vic':
                 msg.channel.send("GUUUUUUUIIIILTYYYYYY!");
