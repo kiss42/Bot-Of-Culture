@@ -1,26 +1,28 @@
 const Discord = require('discord.js');
-const client = new Discord.Client();
-const secretToken = process.env.DISCORD_BOT_SECRET; //This must be kept secret and is stored using an ignored ".env" file
+const bot = new Discord.Client();
+//This must be kept secret and is stored using an ignored ".env" file
+//For server use, the token is stored in heroku for hosting
+const secretLoginToken = process.env.DISCORD_BOT_SECRET; 
 
 //Prefix that precedes a command
-const PREFIX = "!";
+const PREFIX = '!';
 
 /**
  * The ready event is vital, it means that only _after_ this will your bot start reacting to information
  * received from Discord
  */
-client.on('ready', () => {
+bot.on('ready', () => {
     console.log("I AM HERE!");
-    console.log(`${client.user.username} reporting for duty!`);
+    console.log(`${bot.user.username} reporting for duty!`);
 });
 
 //An event listener for messages
-client.on('message', msg => {
+bot.on('message', msg => {
    
     let args = message.content.substring(PREFIX.length).split(" ");
 
     //If the message didn't come from the bot...
-    if (msg.author.id != client.user.id) {
+    if (msg.author.id != bot.user.id) {
         //Switch instructions based on given command
         switch(args[0]){
             case 'ping':
@@ -36,7 +38,7 @@ client.on('message', msg => {
 });
 
 //Logs the Bot into Discord using the Bot's authorization token/login
-client.login(secretToken);
+bot.login(secretLoginToken);
 
 //Use 'npm start' in the terminal sto start the application (The Bot will appear online and send a message to the console)
 //Use 'ctrl + c' to stop running the program! Or else you'll run multiple instances of the script!
