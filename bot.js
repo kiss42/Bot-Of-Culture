@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 const bot = new Discord.Client();
 //This must be kept secret and is stored using an ignored ".env" file
 //For server use, the token is stored in heroku for hosting
-const secretLoginToken = process.env.DISCORD_BOT_SECRET; 
+const BOT_SECRET_LOGIN = process.env.DISCORD_BOT_SECRET; 
 
 //Prefix that precedes a command
 const PREFIX = '!';
@@ -38,7 +38,7 @@ bot.on('message', msg => {
 });
 
 //Logs the Bot into Discord using the Bot's authorization token/login
-bot.login(secretLoginToken);
+bot.login(BOT_SECRET_LOGIN);
 
 //Use 'npm start' in the terminal sto start the application (The Bot will appear online and send a message to the console)
 //Use 'ctrl + c' to stop running the program! Or else you'll run multiple instances of the script!
