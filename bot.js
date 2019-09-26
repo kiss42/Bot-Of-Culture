@@ -17,19 +17,19 @@ bot.on('ready', () => {
 });
 
 //An event listener for messages
-bot.on('message', msg => {
+bot.on('message', message => {
    
     let args = message.content.substring(PREFIX.length).split(" ");
 
     //If the message didn't come from the bot...
-    if (msg.author.id != bot.user.id) {
+    if (message.author.id != bot.user.id) {
         //Switch instructions based on given command
         switch(args[0]){
             case 'ping':
-                msg.reply("pong!")
+                message.reply("pong!")
                 break;
             case 'vic':
-                msg.channel.send("GUUUUUUUIIIILTYYYYYY!");
+                message.channel.send("GUUUUUUUIIIILTYYYYYY!");
                 break;
             default:
                 break;
