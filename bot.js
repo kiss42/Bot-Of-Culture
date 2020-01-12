@@ -30,7 +30,7 @@ bot.on('message', message => {
  * Executes a valid command argument given by a user
  * @param {String} commandArgs A given String representing a command that is trying to be sent to the user
  */
-function executeCommand(command){
+async function executeCommand(command){
     //Switch instruction case based on given command
     switch(command){
         case 'ping':
