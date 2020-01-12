@@ -22,7 +22,17 @@ bot.on('message', message => {
     if (message.author.id != bot.user.id && message.content.startsWith(PREFIX)) {
         // Split the message into substring containing the message following the command prefix
         let args = message.content.substring(PREFIX.length).split(" ");
-        executeCommand(args[0]);
+        switch(args[0]){
+            case 'ping':
+                message.reply("pong!")
+                break;
+            case 'vic':
+                message.channel.send("GUUUUUUUIIIILTYYYYYY!");
+                break;
+            default:
+                break;
+        }
+        // executeCommand(args[0]);
     }
 });
 
