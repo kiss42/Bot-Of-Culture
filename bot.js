@@ -18,25 +18,31 @@ bot.on('ready', () => {
 
 //An event listener for messages
 bot.on('message', message => {
-   
-    // Split the message into substrings with one containing the prefix, and the rest containing the message content
-    let args = message.content.substring(PREFIX.length).split(" ");
-
     //If the message starts with the correct prefix and didn't come from the bot...
-    if (message.author.id != bot.user.id && args[0] == PREFIX) {
-        //Switch instruction case based on given command
-        switch(args[0]){
-            case 'ping':
-                message.reply("pong!")
-                break;
-            case 'vic':
-                message.channel.send("GUUUUUUUIIIILTYYYYYY!");
-                break;
-            default:
-                break;
-        }
+    if (message.author.id != bot.user.id && message.content.startsWith(PREFIX)) {
+        // Split the message into substring containing the message following the command prefix
+        let args = message.content.substring(PREFIX.length).split(" ");
+        executeCommand(args[0]);
     }
 });
+
+/**
+ * Executes a valid command argument given by a user
+ * @param {String} commandArgs A given String representing a command that is trying to be sent to the user
+ */
+function executeCommand(command){
+    //Switch instruction case based on given command
+    switch(command){
+        case 'ping':
+            message.reply("pong!")
+            break;
+        case 'vic':
+            message.channel.send("GUUUUUUUIIIILTYYYYYY!");
+            break;
+        default:
+            break;
+    }
+}
 
 //Logs the Bot into Discord using the Bot's authorization token/login
 bot.login(BOT_SECRET_LOGIN);
