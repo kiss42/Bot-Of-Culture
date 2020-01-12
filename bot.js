@@ -19,11 +19,12 @@ bot.on('ready', () => {
 //An event listener for messages
 bot.on('message', message => {
    
+    // Split the message into substrings with one containing the prefix, and the rest containing the message content
     let args = message.content.substring(PREFIX.length).split(" ");
 
-    //If the message didn't come from the bot...
-    if (message.author.id != bot.user.id) {
-        //Switch instructions based on given command
+    //If the message starts with the correct prefix and didn't come from the bot...
+    if (message.author.id != bot.user.id && args[0] == PREFIX) {
+        //Switch instruction case based on given command
         switch(args[0]){
             case 'ping':
                 message.reply("pong!")
@@ -40,7 +41,7 @@ bot.on('message', message => {
 //Logs the Bot into Discord using the Bot's authorization token/login
 bot.login(BOT_SECRET_LOGIN);
 
-//Use 'npm start' in the terminal sto start the application (The Bot will appear online and send a message to the console)
+//Use 'npm start' in the terminal to start the application (The Bot will appear online and send a message to the console)
 //Use 'ctrl + c' to stop running the program! Or else you'll run multiple instances of the script!
 
 // TODO: Add feature that allows scheduling/entering events, and commands to retrieve event information such as guests, data, location
