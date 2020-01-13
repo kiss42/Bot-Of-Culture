@@ -11,7 +11,7 @@ const bot = new CommandoClient({
 bot.registry
     .registerDefaultTypes()
     .registerGroups([
-        ['text', 'Commands for text responses to messages'],
+        ['reponses', 'Commands that prompt a response message'],
         ['music', 'Commands for handling music in the channel'],        
     ])
     .registerDefaultGroups()
