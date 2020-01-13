@@ -34,29 +34,29 @@ bot.once('ready', () => {
 
 bot.on('error', console.error);
 
-// An event listener for messages --- Deprecated now that the bot is using the Commando framework
-// TO-DO: Convert these commands to Commando-style setup
-bot.on('message', message => {
-    //If the message starts with the correct prefix and didn't come from the bot...
-    if (message.content.startsWith(PREFIX) && message.author.id != bot.user.id) {
-        // Split the message into substring containing the message following the command prefix
-        const args = message.content.substring(PREFIX.length).split(/ +/);
-        const command = args.shift().toLowerCase();
-        switch(command){
-            case 'ping':
-                message.reply("pong!")
-                break;
-            case 'vic':
-                message.channel.send("GUUUUUUUIIIILTYYYYYY!");
-                break;
-            default:
-                message.channel.send("Sorry, I don't recognize that command");
-        }
-    }
-});
-
 //Logs the Bot into Discord using the Bot's authorization token/login
 bot.login(BOT_SECRET_LOGIN);
+
+// // An event listener for messages --- Deprecated now that the bot is using the Commando framework
+// // TO-DO: Convert these commands to Commando-style setup
+// bot.on('message', message => {
+//     //If the message starts with the correct prefix and didn't come from the bot...
+//     if (message.content.startsWith(PREFIX) && message.author.id != bot.user.id) {
+//         // Split the message into substring containing the message following the command prefix
+//         const args = message.content.substring(PREFIX.length).split(/ +/);
+//         const command = args.shift().toLowerCase();
+//         switch(command){
+//             case 'ping':
+//                 message.reply("pong!")
+//                 break;
+//             case 'vic':
+//                 message.channel.send("GUUUUUUUIIIILTYYYYYY!");
+//                 break;
+//             default:
+//                 message.channel.send("Sorry, I don't recognize that command");
+//         }
+//     }
+// });
 
 //Use 'npm start' in the terminal to start the application (The Bot will appear online and send a message to the console)
 //Use 'ctrl + c' to stop running the program! Or else you'll run multiple instances of the script!
