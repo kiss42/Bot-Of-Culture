@@ -1,6 +1,5 @@
 const Discord = require('discord.js');
 const bot = new Discord.Client();
-const ytdl = require('ytdl-core');
 
 //This must be kept secret and is stored using an ignored ".env" file
 //For server use, the token is stored in heroku for hosting
