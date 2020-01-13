@@ -11,15 +11,21 @@ const PREFIX = '!';
  * The ready event is vital, it means that only _after_ this will your bot start reacting to information
  * received from Discord
  */
-bot.on('ready', () => {
+bot.once('ready', () => {
     console.log("I AM HERE!");
     console.log(`${bot.user.username} reporting for duty!`);
 });
+bot.once('reconnecting', () => {
+    console.log('Reconnecting');
+});
+bot.once('disconnect', () => {
+    console.log('Disconnect!');
+});
 
 //An event listener for messages
-bot.on('message', message => {
+bot.on('message', async message => {
     //If the message starts with the correct prefix and didn't come from the bot...
-    if (message.author.id != bot.user.id && message.content.startsWith(PREFIX)) {
+    if (message.content.startsWith(PREFIX) && message.author.id != bot.user.id) {
         // Split the message into substring containing the message following the command prefix
         let args = message.content.substring(PREFIX.length).split(" ");
         switch(args[0]){
@@ -30,8 +36,9 @@ bot.on('message', message => {
                 message.channel.send("GUUUUUUUIIIILTYYYYYY!");
                 break;
             default:
-                break;
+            message.channel.send("Sorry, I don't recognize that command");
         }
+        // As of right now, this function call isn't working.
         // executeCommand(args[0]);
     }
 });
@@ -50,7 +57,7 @@ async function executeCommand(command){
             message.channel.send("GUUUUUUUIIIILTYYYYYY!");
             break;
         default:
-            break;
+            message.channel.send("Sorry, I don't recognize that command");
     }
 }
 
