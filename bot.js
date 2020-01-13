@@ -27,8 +27,9 @@ bot.on('message', async message => {
     //If the message starts with the correct prefix and didn't come from the bot...
     if (message.content.startsWith(PREFIX) && message.author.id != bot.user.id) {
         // Split the message into substring containing the message following the command prefix
-        let args = message.content.substring(PREFIX.length).split(" ");
-        switch(args[0]){
+        const args = message.content.substring(PREFIX.length).split(/ +/);
+        const command = args.shift().toLowerCase();
+        switch(command){
             case 'ping':
                 message.reply("pong!")
                 break;
@@ -36,7 +37,7 @@ bot.on('message', async message => {
                 message.channel.send("GUUUUUUUIIIILTYYYYYY!");
                 break;
             default:
-            message.channel.send("Sorry, I don't recognize that command");
+                message.channel.send("Sorry, I don't recognize that command");
         }
         // As of right now, this function call isn't working.
         // executeCommand(args[0]);
