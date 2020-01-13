@@ -34,9 +34,6 @@ bot.once('ready', () => {
 
 bot.on('error', console.error);
 
-//Logs the Bot into Discord using the Bot's authorization token/login
-bot.login(BOT_SECRET_LOGIN);
-
 // An event listener for messages --- Deprecated now that the bot is using the Commando framework
 // TO-DO: Convert these commands to Commando-style setup
 bot.on('message', message => {
@@ -55,10 +52,11 @@ bot.on('message', message => {
             default:
                 message.channel.send("Sorry, I don't recognize that command");
         }
-        // As of right now, this function call isn't working.
-        // executeCommand(args[0]);
     }
 });
+
+//Logs the Bot into Discord using the Bot's authorization token/login
+bot.login(BOT_SECRET_LOGIN);
 
 //Use 'npm start' in the terminal to start the application (The Bot will appear online and send a message to the console)
 //Use 'ctrl + c' to stop running the program! Or else you'll run multiple instances of the script!
