@@ -1,12 +1,26 @@
-const Discord = require('discord.js');
-const bot = new Discord.Client();
+const { CommandoClient } = require('discord.js-commando');
+const path = require('path');
+const bot = new CommandoClient({
+    commandPrefix: '!',
+    owner: '490292237339590706',
+    // invite: 'https://discord.gg/bRCvFy9' This will be the link to the bot's support server when it goes public
+});
+
+// Registers path to the command folder and associated command group
+// Simply add another folder and matching entry to the register groups to create a new group
+bot.registry
+    .registerDefaultTypes()
+    .registerGroups([
+        ['text', 'Commands for text responses to messages'],
+        ['music', 'Commands for handling music in the channel'],        
+    ])
+    .registerDefaultGroups()
+    .registerDefaultCommands()
+    .registerCommandsIn(path.join(__dirname, 'commands'));
 
 //This must be kept secret and is stored using an ignored ".env" file
 //For server use, the token is stored in heroku for hosting
 const BOT_SECRET_LOGIN = process.env.BOT_SECRET_LOGIN; 
-
-//Prefix that precedes a command
-const PREFIX = '!';
 
 /**
  * The ready event is vital, it means that only _after_ this will your bot start reacting to information
@@ -15,53 +29,31 @@ const PREFIX = '!';
 bot.once('ready', () => {
     console.log("I AM HERE!");
     console.log(`${bot.user.username} reporting for duty!`);
+    bot.user.setActivity('Saving the Uncultured');
 });
-bot.once('reconnecting', () => {
-    console.log('Reconnecting');
-});
-bot.once('disconnect', () => {
-    console.log('Disconnect!');
-});
+bot.on('error', console.error);
 
-//An event listener for messages
-bot.on('message', message => {
-    //If the message starts with the correct prefix and didn't come from the bot...
-    if (message.content.startsWith(PREFIX) && message.author.id != bot.user.id) {
-        // Split the message into substring containing the message following the command prefix
-        const args = message.content.substring(PREFIX.length).split(/ +/);
-        const command = args.shift().toLowerCase();
-        switch(command){
-            case 'ping':
-                message.reply("pong!")
-                break;
-            case 'vic':
-                message.channel.send("GUUUUUUUIIIILTYYYYYY!");
-                break;
-            default:
-                message.channel.send("Sorry, I don't recognize that command");
-        }
-        // As of right now, this function call isn't working.
-        // executeCommand(args[0]);
-    }
-});
-
-/**
- * Executes a valid command argument given by a user
- * @param {String} commandArgs A given String representing a command that is trying to be sent to the user
- */
-async function executeCommand(command){
-    //Switch instruction case based on given command
-    switch(command){
-        case 'ping':
-            message.reply("pong!")
-            break;
-        case 'vic':
-            message.channel.send("GUUUUUUUIIIILTYYYYYY!");
-            break;
-        default:
-            message.channel.send("Sorry, I don't recognize that command");
-    }
-}
+// //An event listener for messages
+// bot.on('message', message => {
+//     //If the message starts with the correct prefix and didn't come from the bot...
+//     if (message.content.startsWith(PREFIX) && message.author.id != bot.user.id) {
+//         // Split the message into substring containing the message following the command prefix
+//         const args = message.content.substring(PREFIX.length).split(/ +/);
+//         const command = args.shift().toLowerCase();
+//         switch(command){
+//             case 'ping':
+//                 message.reply("pong!")
+//                 break;
+//             case 'vic':
+//                 message.channel.send("GUUUUUUUIIIILTYYYYYY!");
+//                 break;
+//             default:
+//                 message.channel.send("Sorry, I don't recognize that command");
+//         }
+//         // As of right now, this function call isn't working.
+//         // executeCommand(args[0]);
+//     }
+// });
 
 //Logs the Bot into Discord using the Bot's authorization token/login
 bot.login(BOT_SECRET_LOGIN);
