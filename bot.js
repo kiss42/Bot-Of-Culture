@@ -23,7 +23,7 @@ bot.once('disconnect', () => {
 });
 
 //An event listener for messages
-bot.on('message', async message => {
+bot.on('message', message => {
     //If the message starts with the correct prefix and didn't come from the bot...
     if (message.content.startsWith(PREFIX) && message.author.id != bot.user.id) {
         // Split the message into substring containing the message following the command prefix
