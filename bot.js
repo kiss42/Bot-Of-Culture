@@ -1,26 +1,44 @@
 const { CommandoClient } = require('discord.js-commando');
+const { Structures } = require('discord.js');
 const path = require('path');
+
+// Apparently, it is vital that this is initialized before the client/bot
+// This is necessary for the bot to be able to play music across different servers
+Structures.extend('Guild', Guild => {
+    class MusicGuild extends Guild {
+        constructor(client, data) {
+            super(client, data);
+            this.musicData = {
+                queue: [],
+                isPlaying: false,
+                songDispatcher: null
+            };
+        }
+    }
+    return MusicGuild;
+});
+
 const bot = new CommandoClient({
     commandPrefix: '!',
     owner: '490292237339590706',
     // invite: 'https://discord.gg/bRCvFy9' This will be the link to the bot's support server when it goes public
 });
 
+//This must be kept secret and is stored using an ignored ".env" file
+//For server use, the token is stored in heroku for hosting
+const BOT_SECRET_LOGIN = process.env.BOT_SECRET_LOGIN; 
+
 // Registers path to the command folder and associated command group
 // Simply add another folder and matching entry to the register groups to create a new group
 bot.registry
     .registerDefaultTypes()
     .registerGroups([
-        ['responses', 'Commands that prompt a response message'],
-        ['music', 'Commands for handling music in the channel'],        
+        ['responses', 'Response Command Group'],
+        ['music', 'Music Command Group'],        
     ])
     .registerDefaultGroups()
     .registerDefaultCommands()
     .registerCommandsIn(path.join(__dirname, 'commands'));
-
-//This must be kept secret and is stored using an ignored ".env" file
-//For server use, the token is stored in heroku for hosting
-const BOT_SECRET_LOGIN = process.env.BOT_SECRET_LOGIN; 
 
 /**
  * The ready event is vital, it means that only _after_ this will your bot start reacting to information

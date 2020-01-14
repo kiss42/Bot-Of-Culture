@@ -27,7 +27,8 @@ module.exports = class Meowcommand extends Command {
         });
     }
 
-    run(message) {
+    // Says Meow... like a cat does
+    async run(message) {
         return message.say('Meow!');
     }
 };

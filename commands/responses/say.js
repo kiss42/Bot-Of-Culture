@@ -18,7 +18,7 @@ module.exports = class Meowcommand extends Command {
             aliases: ['parrot', 'copy'],
             group: 'responses',
             memberName: 'say',
-            description: 'Replies with the text you provide',
+            description: 'Replies with the text you provide.',
             args: [
                 // The arguments necessary for this command. More than one can be added
                 // key - name of the argument
@@ -26,14 +26,15 @@ module.exports = class Meowcommand extends Command {
                 // type - the type of argument that should be provided
                 {
                     key: 'text',
-                    prompt: 'What text would you like the bot to say?',
+                    prompt: 'What would you like me to say?',
                     type: 'string',
                 },
             ],
         });
     }
 
-    run(message, {text}) {
+    // Repeats whatever the user repeats
+    async run(message, {text}) {
         return message.reply(text);
     }
 };
