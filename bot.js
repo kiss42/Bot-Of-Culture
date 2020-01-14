@@ -1,5 +1,5 @@
 const { CommandoClient } = require('discord.js-commando');
-const { Structures } = require('discord.js');
+// const { Structures } = require('discord.js');
 const path = require('path');
 
 // Apparently, it is vital that this is initialized before the client/bot
@@ -13,7 +13,7 @@ Structures.extend('Guild', Guild => {
                 isPlaying: false,
                 songDispatcher: null
             };
-        }
+        };
     }
     return MusicGuild;
 });
