@@ -1,5 +1,5 @@
 const { CommandoClient } = require('discord.js-commando');
-// const { Structures } = require('discord.js');
+const { Structures } = require('discord.js');
 const path = require('path');
 
 // Apparently, it is vital that this is initialized before the client/bot
@@ -47,7 +47,7 @@ bot.registry
 bot.once('ready', () => {
     console.log("I AM HERE!");
     console.log(`${bot.user.username} reporting for duty!`);
-    bot.user.setActivity('Commando');
+    bot.user.setActivity('!help for Commands', 'Watching YOU');
 });
 
 bot.on('error', console.error);
