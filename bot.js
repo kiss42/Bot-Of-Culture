@@ -47,7 +47,7 @@ bot.registry
 bot.once('ready', () => {
     console.log("I AM HERE!");
     console.log(`${bot.user.username} reporting for duty!`);
-    bot.user.setActivity('!help for Commands', 'Watching YOU');
+    bot.user.setActivity('Hard to Get');
 });
 
 bot.on('error', console.error);
