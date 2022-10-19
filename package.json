@@ -1,0 +1,9 @@
+{
+  "name": "Bot-Of-Culture",
+  "version": "1.0.0",
+  "description": "A Discord Bot curated for the Men of Culture discord server",
+  "main": "index.js",
+  "repository": "git@github.com:4upz/Bot-Of-Culture.git",
+  "author": "4upz <ams382@case.edu>",
+  "license": "MIT"
+}
