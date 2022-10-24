@@ -1,25 +1,23 @@
-import { Collection, GatewayIntentBits, REST } from 'discord.js'
+import { Collection, Events, GatewayIntentBits, REST } from 'discord.js'
 import dotenv from 'dotenv'
 import { sendGameInvite } from './commands/rps'
 import { loadCommands } from './utils/loadCommands'
 import { BotClient } from './utils/types'
+import { loadEvents } from './utils/loadEvents'
 
 dotenv.config()
 const token: string = process.env.DISCORD_TOKEN ?? ''
 
 const bot: BotClient = new BotClient({ intents: [GatewayIntentBits.Guilds] })
+loadEvents(bot)
 
 bot.commands = new Collection() // Attach command collection to bot so that it can be accessed anywhere
-
-const activeGames = {}
-
-bot.once('ready', () => {
-  console.log(`Logged in as ${bot.user?.username}!`)
-})
-
 loadCommands(bot)
 
-bot.on('interactionCreate', async (interaction) => {
+bot.once(Events.ClientReady, () => {
+  console.log(`Logged in as ${bot.user?.username}!`)
+})
+bot.on(Events.InteractionCreate, async (interaction) => {
   if (!interaction.isChatInputCommand()) return //Ignore non-chat commands
 
   const client = interaction.client as BotClient
