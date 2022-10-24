@@ -11,11 +11,16 @@
   },
   "private": "true",
   "scripts": {
-    "start-tutorial": "nodemon src/tutorial/legacyApp.js",
-    "start": "ts-node-dev src/app.ts"
+    "start": "ts-node-dev src/app.ts",
+    "start:tutorial": "nodemon src/tutorial/legacyApp.js",
+    "deploy-commands": "ts-node scripts/deployCommands.ts",
+    "deploy-commands:global": "ts-node scripts/deployCommands.ts global"
   },
   "devDependencies": {
     "@types/node": "^18.11.3",
+    "@typescript-eslint/eslint-plugin": "^5.40.1",
+    "@typescript-eslint/parser": "^5.40.1",
+    "eslint": "^8.26.0",
     "nodemon": "^2.0.20",
     "ts-node": "^10.9.1",
     "ts-node-dev": "^2.0.0",

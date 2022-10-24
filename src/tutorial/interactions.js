@@ -70,7 +70,7 @@ export function sendGameInvite(req, res, activeGames) {
  * @param {Express.Response} res response object
  */
 export async function sendGameAcceptance(componentId, req, res) {
-  //get the associated game ID
+  // get the associated game ID
   const gameId = componentId.replace('accept_button_', '')
   // Delete message with token in request body
   const endpoint = `webhooks/${process.env.APP_ID}/${req.body.token}/messages/${req.body.message.id}`

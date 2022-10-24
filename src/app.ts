@@ -1,33 +1,41 @@
-import { Client, GatewayIntentBits, REST } from 'discord.js'
+import { Collection, GatewayIntentBits, REST } from 'discord.js'
 import dotenv from 'dotenv'
-import { createCommandRoutes } from './commands'
 import { sendGameInvite } from './commands/rps'
+import { loadCommands } from './utils/loadCommands'
+import { BotClient } from './utils/types'
 
 dotenv.config()
 const token: string = process.env.DISCORD_TOKEN ?? ''
 
-const rest = new REST().setToken(token)
-// Creates REST routes with installed slash commands
-createCommandRoutes(rest)
+const bot: BotClient = new BotClient({ intents: [GatewayIntentBits.Guilds] })
 
-const client = new Client({ intents: [GatewayIntentBits.Guilds] })
+bot.commands = new Collection() // Attach command collection to bot so that it can be accessed anywhere
 
 const activeGames = {}
 
-client.on('ready', () => {
-  console.log(`Logged in as ${client.user?.username}!`)
+bot.once('ready', () => {
+  console.log(`Logged in as ${bot.user?.username}!`)
 })
 
-client.on('interactionCreate', async (interaction) => {
-  if (!interaction.isChatInputCommand()) return
+loadCommands(bot)
 
-  if (interaction.commandName === 'ping') {
-    await interaction.reply('Pong')
+bot.on('interactionCreate', async (interaction) => {
+  if (!interaction.isChatInputCommand()) return //Ignore non-chat commands
+
+  const client = interaction.client as BotClient
+  const command = client.commands.get(interaction.commandName)
+
+  if (!command) {
+    console.error(`No command matching ${interaction.commandName} was found.`)
+    return
   }
 
-  if (interaction.commandName === 'challenge') {
-    await sendGameInvite(activeGames, interaction)
+  try {
+    await command.execute(interaction)
+  } catch (error) {
+    console.error(error)
+    await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true })
   }
 })
 
-client.login(token)
+bot.login(token)
