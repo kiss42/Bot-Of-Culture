@@ -1,6 +1,5 @@
 import { Collection, Events, GatewayIntentBits, REST } from 'discord.js'
 import dotenv from 'dotenv'
-import { sendGameInvite } from './commands/rps'
 import { loadCommands } from './utils/loadCommands'
 import { BotClient } from './utils/types'
 import { loadEvents } from './utils/loadEvents'

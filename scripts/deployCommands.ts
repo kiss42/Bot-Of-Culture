@@ -1,7 +1,8 @@
 import { REST, Routes } from 'discord.js'
 import dotenv from 'dotenv'
 import fs from 'node:fs'
-import { SlashCommand } from '../src/utils/types'
+import path from 'node:path'
+import { BotClient, SlashCommand } from '../src/utils/types'
 
 dotenv.config()
 const clientId: string = process.env.APP_ID ?? ''
@@ -10,18 +11,6 @@ const guildId: string = process.env.GUILD_ID ?? '' // For deploying to specific 
 
 // Deploys commands for the bot
 const commands: SlashCommand[] = []
-// Grab all the command files from the commands directory
-const commandFiles = fs.readdirSync('./src/commands').filter((file) => file.endsWith('.ts') && !file.includes('index'))
-
-console.log('commands', commandFiles)
-
-const importCommands = async (commandFiles: Array<string>) => {
-  // Grab the SlashCommandBuilder#toJSON() output of each command's data for deployment
-  for (const file of commandFiles) {
-    const command = await import(`../src/commands/${file}`)
-    commands.push(command.default.data.toJSON())
-  }
-}
 
 const deployCommands = async () => {
   // Construct and prepare the rest module
@@ -45,4 +34,42 @@ const deployCommands = async () => {
   }
 }
 
-importCommands(commandFiles).then(deployCommands)
+/** *** TODO: Duplicated code because I'm lazy, refactor to common utility that both deployCommands and loadCommands can use *** */
+function isValidCommandFile(file: string) {
+  return file.endsWith('.ts')
+}
+
+function isValidDirectory(file: string, dirPath: string) {
+  const filePath = path.join(dirPath, file)
+  return fs.lstatSync(filePath.toString()).isDirectory() && file !== 'utils'
+}
+
+/**
+ * Looks through the commands folder and recursively adds each file (including subdirectories) to the bot client
+ * @param dirPath current directory to search
+ * @param commandsPath commands directory
+ * @param client Discord Bot client to set commands for
+ */
+async function loadDirectoryContents(dirPath: string, commands: SlashCommand[]) {
+  const commandFiles = fs
+    .readdirSync(dirPath)
+    .filter((file) => isValidCommandFile(file) || isValidDirectory(file, dirPath))
+
+  for (const file of commandFiles) {
+    const filePath = path.join(dirPath, file)
+    // If subdirectory, read and load its file contents and other potential subdirectories
+    if (fs.lstatSync(filePath).isDirectory()) {
+      await loadDirectoryContents(filePath, commands)
+    } else {
+      const command = await import(`../${filePath}`).then((module) => module.default)
+      // Set a new item in the Collection with the key as the command name and the value as the exported module
+      if ('data' in command && 'execute' in command) {
+        commands.push(command.data.toJSON())
+      } else {
+        console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`)
+      }
+    }
+  }
+}
+
+loadDirectoryContents('./src/commands', commands).then(deployCommands)

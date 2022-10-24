@@ -1,7 +1,8 @@
+import { APIApplicationCommandOptionChoice } from 'discord.js'
 import { RPSChoices } from './choices'
 
 // Get the game choices from game.js
-export function createCommandChoices() {
+export function createCommandChoices(): APIApplicationCommandOptionChoice<string>[] {
   const choices = getRPSChoices()
   const commandChoices = []
 
