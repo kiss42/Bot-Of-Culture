@@ -1,4 +1,10 @@
-import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js'
+import {
+  ActionRowBuilder,
+  ButtonBuilder,
+  ButtonStyle,
+  ChatInputCommandInteraction,
+  SlashCommandBuilder,
+} from 'discord.js'
 import { BotClient } from 'src/utils/types'
 import { createCommandChoices } from './utils/utils'
 
@@ -26,7 +32,14 @@ function sendGameInvite(interaction: ChatInputCommandInteraction) {
     choice,
   }
 
-  interaction.reply(`Thanks for selecting ${choice}. We're still working on what to do with it`)
+  const actionRow = new ActionRowBuilder().addComponents(
+    new ButtonBuilder().setCustomId(`accept_button_${interaction.id}`).setLabel('Accept').setStyle(ButtonStyle.Primary)
+  )
+
+  interaction.reply({
+    content: `Rock papers scissors challenge from <@${userId}>`,
+    components: [actionRow as any],
+  })
 }
 
 export default command
