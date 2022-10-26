@@ -1,5 +1,12 @@
+export interface RPSOption {
+  [choice: string]: {
+    description: string
+    [otherChoice: string]: string
+  }
+}
+
 // this is just to figure out winner + verb
-export const RPSChoices = {
+export const RPSChoices: RPSOption = {
   rock: {
     description: 'sedimentary, igneous, or perhaps even metamorphic',
     virus: 'outwaits',

@@ -2,7 +2,7 @@ import { REST, Routes } from 'discord.js'
 import dotenv from 'dotenv'
 import fs from 'node:fs'
 import path from 'node:path'
-import { BotClient, SlashCommand } from '../src/utils/types'
+import { SlashCommand } from '../src/utils/types'
 
 dotenv.config()
 const clientId: string = process.env.APP_ID ?? ''
@@ -41,7 +41,8 @@ function isValidCommandFile(file: string) {
 
 function isValidDirectory(file: string, dirPath: string) {
   const filePath = path.join(dirPath, file)
-  return fs.lstatSync(filePath.toString()).isDirectory() && file !== 'utils'
+  const ignoredFolders = ['utils', 'buttons']
+  return fs.lstatSync(filePath.toString()).isDirectory() && !ignoredFolders.includes(file)
 }
 
 /**

@@ -1,6 +1,13 @@
-import { ChatInputCommandInteraction, Client, ClientOptions, Collection, SlashCommandBuilder } from 'discord.js'
+import {
+  ChatInputCommandInteraction,
+  Client,
+  ClientOptions,
+  Collection,
+  MessageComponentInteraction,
+  SlashCommandBuilder,
+} from 'discord.js'
 
-interface ActiveGame {
+export interface ActiveGame {
   id: string
   choice: string
 }
@@ -15,5 +22,5 @@ export class BotClient extends Client {
 
 export interface SlashCommand {
   data: SlashCommandBuilder
-  execute: (interaction: ChatInputCommandInteraction) => Promise<void>
+  execute: (interaction: ChatInputCommandInteraction | MessageComponentInteraction) => Promise<void>
 }

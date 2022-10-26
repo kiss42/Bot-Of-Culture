@@ -1,4 +1,5 @@
 import {
+  ActionRow,
   ActionRowBuilder,
   ButtonBuilder,
   ButtonStyle,
@@ -6,7 +7,7 @@ import {
   SlashCommandBuilder,
 } from 'discord.js'
 import { BotClient } from 'src/utils/types'
-import { createCommandChoices } from './utils/utils'
+import { createCommandChoices } from './utils'
 
 const command = {
   data: new SlashCommandBuilder()
@@ -33,7 +34,10 @@ function sendGameInvite(interaction: ChatInputCommandInteraction) {
   }
 
   const actionRow = new ActionRowBuilder().addComponents(
-    new ButtonBuilder().setCustomId(`accept_button_${interaction.id}`).setLabel('Accept').setStyle(ButtonStyle.Primary)
+    new ButtonBuilder()
+      .setCustomId(`acceptChallenge_button_${interaction.id}`)
+      .setLabel('Accept')
+      .setStyle(ButtonStyle.Primary)
   )
 
   interaction.reply({
