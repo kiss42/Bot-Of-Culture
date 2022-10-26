@@ -1,4 +1,4 @@
-import { APIApplicationCommandOptionChoice } from 'discord.js'
+import { APIApplicationCommandOptionChoice, APISelectMenuOption } from 'discord.js'
 import { ActiveGame } from 'src/utils/types'
 import { RPSChoices } from './choices'
 
@@ -62,8 +62,13 @@ export function createCommandChoices(): APIApplicationCommandOptionChoice<string
 }
 
 // Function to fetch shuffled options for select menu
-export function getShuffledOptions(): APIApplicationCommandOptionChoice<string>[] {
-  return createCommandChoices().sort(() => Math.random() - 0.5)
+export function getShuffledOptions(): APISelectMenuOption[] {
+  const commandChoices = createCommandChoices()
+  const shuffledOptions = commandChoices.map((choice) => ({
+    ...choice,
+    label: choice.name,
+  }))
+  return shuffledOptions.sort(() => Math.random() - 0.5) as unknown as APISelectMenuOption[]
 }
 
 function capitalize(str: string) {
