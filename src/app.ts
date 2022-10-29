@@ -3,7 +3,6 @@ import dotenv from 'dotenv'
 import { loadCommands } from './utils/loadCommands'
 import { BotClient } from './utils/types'
 import { loadEvents } from './utils/loadEvents'
-
 dotenv.config()
 const token: string = process.env.DISCORD_TOKEN ?? ''
 
@@ -14,3 +13,7 @@ loadCommands(bot)
   .then(() => loadEvents(bot))
   .then(() => bot.login(token))
 
+process.once('exit', async () => {
+  await bot.db.$disconnect()
+  console.log('Exiting...')
+})

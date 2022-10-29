@@ -1,3 +1,4 @@
+import { Prisma, prisma } from '@prisma/client'
 import {
   ActionRow,
   ActionRowBuilder,
@@ -23,15 +24,18 @@ const command = {
   execute: sendGameInvite,
 }
 
-function sendGameInvite(interaction: ChatInputCommandInteraction) {
+async function sendGameInvite(interaction: ChatInputCommandInteraction) {
   const userId = interaction.user.id
-  const choice = interaction.options.data[0].value as string
+  const choice = interaction.options.data[0].value.toString()
   const bot = interaction.client as BotClient
 
-  bot.activeGames[interaction.id] = {
-    id: userId,
+  const data: Prisma.RPSGameCreateInput = {
+    interactionId: interaction.id,
+    userId: userId,
+    guildId: interaction.guildId,
     choice,
   }
+  await bot.db.rPSGame.create({ data })
 
   const actionRow = new ActionRowBuilder().addComponents(
     new ButtonBuilder()
@@ -40,7 +44,7 @@ function sendGameInvite(interaction: ChatInputCommandInteraction) {
       .setStyle(ButtonStyle.Primary)
   )
 
-  interaction.reply({
+  await interaction.reply({
     content: `Rock papers scissors challenge from <@${userId}>`,
     components: [actionRow as any],
   })

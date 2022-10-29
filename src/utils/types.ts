@@ -1,3 +1,4 @@
+import { PrismaClient } from '@prisma/client'
 import {
   ChatInputCommandInteraction,
   Client,
@@ -13,10 +14,21 @@ export interface ActiveGame {
 }
 export class BotClient extends Client {
   public commands: Collection<String, SlashCommand>
-  public activeGames: { [userId: string]: ActiveGame }
+  public db: PrismaClient
   constructor(options: ClientOptions) {
     super(options)
-    this.activeGames = {}
+    this.initDatabase()
+  }
+
+  async initDatabase() {
+    // Init database
+    try {
+      this.db = new PrismaClient()
+      await this.db.$connect()
+      console.log('Database connected!')
+    } catch (error) {
+      console.error('Something went wrong connected to the database')
+    }
   }
 }
 

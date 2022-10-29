@@ -67,6 +67,7 @@ export function getShuffledOptions(): APISelectMenuOption[] {
   const shuffledOptions = commandChoices.map((choice) => ({
     ...choice,
     label: choice.name,
+
   }))
   return shuffledOptions.sort(() => Math.random() - 0.5) as unknown as APISelectMenuOption[]
 }

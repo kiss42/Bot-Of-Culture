@@ -11,17 +11,16 @@ async function sendGameReply(interaction: MessageComponentInteraction) {
   const gameId = interaction.customId.replace('selectChallenge_choice_', '')
   const bot = interaction.client as BotClient
 
-  if (bot.activeGames[gameId]) {
-    const userId = interaction.user.id
-    const choice = (<SelectMenuInteraction>interaction).values[0]
+  const activeGame = await bot.db.rPSGame.findFirst({ where: { interactionId: gameId } })
+
+  if (activeGame) {
     //Calculate result from helper function
-    const resultStr = getResult(bot.activeGames[gameId], {
-      id: userId,
-      choice,
-    })
+    const p1Info = { id: activeGame.userId, choice: activeGame.choice }
+    const p2Info = { id: interaction.user.id, choice: (<SelectMenuInteraction>interaction).values[0] }
+    const resultStr = getResult(p1Info, p2Info)
 
     // Remove game from storage
-    delete bot.activeGames[gameId]
+    await bot.db.rPSGame.delete({ where: { id: activeGame.id } })
     // Update message with token in request body
     try {
       // Send results
