@@ -16,7 +16,7 @@
         "downlevelIteration": true,
         "resolveJsonModule": true,
         "noImplicitReturns": true,
-        "declaration": true,
+        "declaration": false,
     },
     "include": [
         "./**/*.ts"

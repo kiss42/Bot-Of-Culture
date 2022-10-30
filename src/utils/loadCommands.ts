@@ -8,7 +8,7 @@ export async function loadCommands(bot: BotClient) {
 }
 
 function isValidCommandFile(file: string) {
-  return file.endsWith('.ts')
+  return file.endsWith('.ts') || file.endsWith('.js')
 }
 
 function isValidDirectory(file: string, dirPath: string) {
