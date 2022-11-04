@@ -1,17 +1,19 @@
-import { Collection, Events, GatewayIntentBits, REST } from 'discord.js'
+import { Collection, GatewayIntentBits } from 'discord.js'
 import dotenv from 'dotenv'
 import { loadCommands } from './utils/loadCommands'
-import { BotClient } from './utils/types'
 import { loadEvents } from './utils/loadEvents'
+import { BotClient } from './Bot'
+
 dotenv.config()
 const token: string = process.env.DISCORD_TOKEN ?? ''
 
 const bot: BotClient = new BotClient({ intents: [GatewayIntentBits.Guilds] })
-bot.commands = new Collection() // Attach command collection to bot so that it can be accessed anywhere
+// Attach command collection to bot so that it can be accessed anywhere
+bot.commands = new Collection()
 
 loadCommands(bot)
-  .then(() => loadEvents(bot))
-  .then(() => bot.login(token))
+    .then(() => loadEvents(bot))
+    .then(() => bot.login(token))
 
 process.once('exit', async () => {
   await bot.db.$disconnect()

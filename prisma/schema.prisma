@@ -10,10 +10,27 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+type User {
+  userId String
+  username String
+}
+
 model RPSGame {
   id      String @id @default(auto()) @map("_id") @db.ObjectId
   interactionId  String @unique
   userId  String
   guildId String
   choice  String
+}
+
+model MovieReview {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  movieId String  
+  user User
+  guildId String
+  score Int
+  comment String?
+  createdAt DateTime @default(now()) @map("_createdAt")
+
+  @@index([movieId, guildId, user])
 }

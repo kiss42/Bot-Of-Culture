@@ -1,5 +1,5 @@
 import { MessageComponentInteraction, SelectMenuInteraction } from 'discord.js'
-import { BotClient } from 'src/utils/types'
+import { BotClient } from 'src/Bot'
 import { getRandomEmoji, getResult } from '../utils'
 
 const command = {

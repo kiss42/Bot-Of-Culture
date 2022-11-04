@@ -1,13 +1,12 @@
-import { Prisma, prisma } from '@prisma/client'
+import { Prisma } from '@prisma/client'
 import {
-  ActionRow,
   ActionRowBuilder,
   ButtonBuilder,
   ButtonStyle,
   ChatInputCommandInteraction,
   SlashCommandBuilder,
 } from 'discord.js'
-import { BotClient } from 'src/utils/types'
+import { BotClient } from 'src/Bot'
 import { createCommandChoices } from './utils'
 
 const command = {
@@ -19,7 +18,7 @@ const command = {
         .setName('object')
         .setDescription('Pick your object')
         .setRequired(true)
-        .addChoices(...createCommandChoices())
+        .addChoices(...createCommandChoices()),
     ),
   execute: sendGameInvite,
 }
@@ -41,7 +40,7 @@ async function sendGameInvite(interaction: ChatInputCommandInteraction) {
     new ButtonBuilder()
       .setCustomId(`acceptChallenge_button_${interaction.id}`)
       .setLabel('Accept')
-      .setStyle(ButtonStyle.Primary)
+      .setStyle(ButtonStyle.Primary),
   )
 
   await interaction.reply({
