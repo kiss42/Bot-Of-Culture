@@ -88,7 +88,7 @@ function createReviewPromptMessage(
   reviews: MovieReview[],
   userId: string,
 ): string | void {
-  if (!reviews.some((review) => review.user.userId === userId))
+  if (!reviews.some((review) => review.userId === userId))
     if (!reviews.length)
       return 'Looks like no one has reviewed this movie. Make everyone jealous by being the first one to review it!'
     else

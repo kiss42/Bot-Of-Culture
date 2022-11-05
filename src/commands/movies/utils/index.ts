@@ -1,5 +1,9 @@
 import {
   ActionRowBuilder,
+  AnyComponentBuilder,
+  ButtonBuilder,
+  ButtonStyle,
+  ChatInputCommandInteraction,
   EmbedBuilder,
   MessageComponentInteraction,
   ModalActionRowComponentBuilder,
@@ -11,9 +15,10 @@ import {
   TextInputStyle,
 } from 'discord.js'
 import { reviewChoices } from './choices'
-import { Prisma } from '@prisma/client'
+import { MovieReview, Prisma } from '@prisma/client'
 import { BotClient } from '../../../Bot'
 import dayjs from 'dayjs'
+import { MovieSearchResult } from '../../../utils/types'
 
 export async function promptReview(interaction: MessageComponentInteraction) {
   const movieId = interaction.customId.replace('reviewMovie_button_', '')
@@ -70,24 +75,26 @@ export async function saveReview(
 
   const data: Prisma.MovieReviewCreateInput = {
     movieId: params[2],
-    user: {
-      userId: interaction.user.id,
-      username: interaction.user.username,
-    },
+    userId: interaction.user.id,
+    username: interaction.user.username,
     guildId: interaction.guildId,
     score: parseInt(params[3]),
     comment: reviewComment,
   }
   try {
     let review = await bot.db.movieReview.findFirst({
-      where: { user: data.user, movieId: data.movieId, guildId: data.guildId },
+      where: {
+        userId: data.userId,
+        movieId: data.movieId,
+        guildId: data.guildId,
+      },
     })
     let statusReply = 'Review successfully added! 🎉'
 
     if (review) {
       review = await bot.db.movieReview.update({
         where: { id: review.id },
-        data: data,
+        data,
       })
       statusReply = 'Review successfully updated!'
     } else {
@@ -96,27 +103,16 @@ export async function saveReview(
 
     const movie = await bot.movies.getById(data.movieId)
 
-    if (!reviewComment) reviewComment = '*No comment added*'
+    if (!reviewComment) review.comment = '*No comment added*'
 
-    const reviewInfoEmbed = new EmbedBuilder()
-      .setColor('#01b4e4')
-      .setTitle(`${movie.title} review by ${review.user.username}`)
-      .setAuthor({
-        name: review.user.username,
-        iconURL: interaction.user.avatarURL(),
-      })
-      .setDescription(reviewComment)
-      .setImage(movie.image)
-      .addFields([
-        {
-          name: 'Release Date',
-          value: dayjs(movie.date).format('MMMM D, YYYY'),
-        },
-        { name: 'Score', value: convertScoreToStars(review.score) },
-      ])
+    const reviewInfoEmbed = createReviewEmbed(
+      review,
+      movie,
+      interaction.user.avatarURL(),
+    )
 
     await interaction.channel.send({
-      content: `<@${review.user.userId}>`,
+      content: `<@${review.userId}> just left a review!`,
       embeds: [reviewInfoEmbed as any],
       components: [],
     })
@@ -130,7 +126,71 @@ export async function saveReview(
   }
 }
 
+export async function replyWithMovieResults(
+  interaction: ChatInputCommandInteraction,
+  customIdPrefix: string,
+  additionalMessage: string,
+  isEphemeral: boolean,
+) {
+  const bot = interaction.client as BotClient
+  const query = interaction.options.getString('title')
+
+  const results = await bot.movies.search(query)
+
+  if (results.length) {
+    const actionRow: ActionRowBuilder<AnyComponentBuilder> =
+      new ActionRowBuilder().addComponents(
+        results.map((result) => {
+          let { title, date } = result
+          if (title.length > 73) title = `${title.substring(0, 69)}...`
+
+          date = dayjs(date).format('YYYY')
+          return new ButtonBuilder()
+            .setCustomId(`${customIdPrefix}_button_${result.id}`)
+            .setLabel(`${title} (${date})`)
+            .setStyle(ButtonStyle.Success)
+        }),
+      )
+
+    const comment = additionalMessage || ''
+    await interaction.reply({
+      content: 'Please select a result or try another search. 🎬\n ' + comment,
+      components: [actionRow as any],
+      ephemeral: isEphemeral,
+    })
+  } else {
+    await interaction.reply({
+      content:
+        'Sorry, there were no results matching your search. 😔 Please try again.',
+      ephemeral: true,
+    })
+  }
+}
+
 export function convertScoreToStars(score: number, count?: number) {
   const suffix = count ? ` (${count})` : ''
   return '⭐️'.repeat(score) + suffix
+}
+
+export function createReviewEmbed(
+  review: MovieReview,
+  movie: MovieSearchResult,
+  avatar: string,
+) {
+  return new EmbedBuilder()
+    .setColor('#01b4e4')
+    .setTitle(`${movie.title} review by ${review.username}`)
+    .setAuthor({
+      name: review.username,
+      iconURL: avatar,
+    })
+    .setDescription(review.comment)
+    .setImage(movie.image)
+    .addFields([
+      {
+        name: 'Release Date',
+        value: dayjs(movie.date).format('MMMM D, YYYY'),
+      },
+      { name: 'Score', value: convertScoreToStars(review.score) },
+    ])
 }

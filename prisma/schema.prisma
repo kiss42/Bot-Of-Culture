@@ -10,11 +10,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-type User {
-  userId String
-  username String
-}
-
 model RPSGame {
   id      String @id @default(auto()) @map("_id") @db.ObjectId
   interactionId  String @unique
@@ -26,11 +21,12 @@ model RPSGame {
 model MovieReview {
   id     String @id @default(auto()) @map("_id") @db.ObjectId
   movieId String  
-  user User
   guildId String
   score Int
   comment String?
+  userId String
+  username String
   createdAt DateTime @default(now()) @map("_createdAt")
 
-  @@index([movieId, guildId, user])
+  @@index([movieId, guildId, userId])
 }
