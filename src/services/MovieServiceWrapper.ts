@@ -1,6 +1,6 @@
 import dotenv from 'dotenv'
 import needle, { BodyData, NeedleOptions } from 'needle'
-import { MovieSearchResult } from 'src/utils/types'
+import { SearchResult } from 'src/utils/types'
 
 dotenv.config()
 
@@ -18,7 +18,7 @@ export default class MovieServiceWrapper {
     this.baseURL = 'https://api.themoviedb.org/3'
   }
 
-  async search(query: string): Promise<MovieSearchResult[]> {
+  async search(query: string): Promise<SearchResult[]> {
     const endpoint = `${this.baseURL}/search/movie`
     const params: BodyData = { query }
 
@@ -46,7 +46,7 @@ export default class MovieServiceWrapper {
     }))
   }
 
-  async getById(id: string): Promise<MovieSearchResult> {
+  async getById(id: string): Promise<SearchResult> {
     const endpoint = `${this.baseURL}/movie/${id}`
 
     const result: any = await needle('get', endpoint, null, this.headers)

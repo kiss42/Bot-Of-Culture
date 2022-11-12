@@ -10,10 +10,15 @@ export interface SlashCommand {
   execute: (interaction: ChatInputCommandInteraction | MessageComponentInteraction) => Promise<void>
 }
 
-export interface MovieSearchResult {
+export interface SearchResult {
   id: string
   title: string
   description: string
   image: string
   date: string
+}
+
+export interface GameSearchResult extends SearchResult {
+platform: string
+
 }
