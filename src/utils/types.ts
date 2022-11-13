@@ -2,6 +2,7 @@ import {
   ChatInputCommandInteraction,
   MessageComponentInteraction,
   SlashCommandBuilder,
+  SlashCommandSubcommandsOnlyBuilder,
 } from 'discord.js'
 
 export interface ActiveGame {
@@ -10,10 +11,15 @@ export interface ActiveGame {
 }
 
 export interface SlashCommand {
-  data: SlashCommandBuilder;
+  data: SlashCommandBuilder | SlashCommandSubcommandsOnlyBuilder;
   execute: (
-    interaction: ChatInputCommandInteraction | MessageComponentInteraction
+    interaction: ChatInputCommandInteraction | MessageComponentInteraction,
+    subCommandExecutor?: SubcommandExecutors
   ) => Promise<void>;
+}
+
+export interface SubcommandExecutors {
+  [key: string]: (interaction: ChatInputCommandInteraction) => Promise<void>;
 }
 
 export interface SearchResult {
