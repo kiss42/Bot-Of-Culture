@@ -1,6 +1,6 @@
 import dotenv from 'dotenv'
 import needle, { BodyData, NeedleOptions } from 'needle'
-import { SearchResult } from '../../src/utils/types'
+import { SearchResult } from '../utils/types'
 
 dotenv.config()
 

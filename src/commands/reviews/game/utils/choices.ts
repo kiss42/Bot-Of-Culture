@@ -4,7 +4,7 @@ export const reviewChoices: APISelectMenuOption[] = [
   {
     label: '⭐️',
     value: '1',
-    description: 'Not even worth a your money. Wait for gamepass overlords to buy it.',
+    description: 'Not even worth a your money. Wait for Gamepass overlords to buy it.',
   },
   {
     label: '⭐️️⭐️️',
