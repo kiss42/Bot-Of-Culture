@@ -4,7 +4,7 @@ import { MovieSearchResult } from 'src/utils/types'
 
 dotenv.config()
 
-export default class MovieServiceWrapper {
+export default class MovieService {
   private authHeader: { Authorization: string }
   private headers: NeedleOptions
   private baseURL: string
