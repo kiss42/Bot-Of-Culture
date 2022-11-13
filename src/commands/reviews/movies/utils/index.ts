@@ -44,25 +44,25 @@ export async function promptReviewComment(interaction: SelectMenuInteraction) {
   const reviewScore = params[3]
 
   const actionRow =
-    new ActionRowBuilder<ModalActionRowComponentBuilder>().addComponents(
-      new TextInputBuilder()
-        .setCustomId('reviewCommentInput')
-        .setLabel('What did you think of the movie?')
-        .setPlaceholder('Enter reasons behind your rating here!')
-        .setStyle(TextInputStyle.Paragraph)
-        .setRequired(true),
-    )
+      new ActionRowBuilder<ModalActionRowComponentBuilder>().addComponents(
+          new TextInputBuilder()
+              .setCustomId('reviewCommentInput')
+              .setLabel('What did you think of the movie?')
+              .setPlaceholder('Enter reasons behind your rating here!')
+              .setStyle(TextInputStyle.Paragraph)
+              .setRequired(true),
+      )
 
   const modal = new ModalBuilder()
-    .setCustomId(`reviewComment_modal_${movieId}_${reviewScore}`)
-    .setTitle('Review Comment')
-    .addComponents(actionRow)
+      .setCustomId(`reviewComment_modal_${movieId}_${reviewScore}`)
+      .setTitle('Review Comment')
+      .addComponents(actionRow)
 
   await interaction.showModal(modal)
 }
 
 export async function saveReview(
-  interaction: SelectMenuInteraction | ModalSubmitInteraction,
+    interaction: SelectMenuInteraction | ModalSubmitInteraction,
 ) {
   let reviewComment
   const params = interaction.customId.split('_')
@@ -106,9 +106,9 @@ export async function saveReview(
     if (!reviewComment) review.comment = '*No comment added*'
 
     const reviewInfoEmbed = createReviewEmbed(
-      review,
-      movie,
-      interaction.user.avatarURL(),
+        review,
+        movie,
+        interaction.user.avatarURL(),
     )
 
     await interaction.channel.send({
@@ -121,47 +121,49 @@ export async function saveReview(
   } catch (error) {
     console.error(error)
     await interaction.editReply(
-      'Sorry, something went wrong with saving your review 🫣',
+        'Sorry, something went wrong with saving your review 🫣',
     )
   }
 }
 
-export async function replyWithMovieResults(
-  interaction: ChatInputCommandInteraction,
-  customIdPrefix: string,
-  additionalMessage: string,
-  isEphemeral: boolean,
+export async function replyWithResults(
+    interaction: ChatInputCommandInteraction,
+    customIdPrefix: string,
+    additionalMessage: string,
+    isEphemeral: boolean,
+    isSeries?: boolean,
 ) {
   const bot = interaction.client as BotClient
   const query = interaction.options.getString('title')
 
-  const results = await bot.movies.search(query)
+  const results = isSeries ? await bot.movies.searchSeries(query) : await bot.movies.search(query)
 
   if (results.length) {
     const actionRow: ActionRowBuilder<AnyComponentBuilder> =
-      new ActionRowBuilder().addComponents(
-        results.map((result) => {
-          let { title, date } = result
-          if (title.length > 73) title = `${title.substring(0, 69)}...`
+        new ActionRowBuilder().addComponents(
+            results.map((result) => {
+              let { title, date } = result
+              if (title.length > 73) title = `${title.substring(0, 69)}...`
 
-          date = dayjs(date).format('YYYY')
-          return new ButtonBuilder()
-            .setCustomId(`${customIdPrefix}_button_${result.id}`)
-            .setLabel(`${title} (${date})`)
-            .setStyle(ButtonStyle.Success)
-        }),
-      )
+              date = dayjs(date).format('YYYY')
+              return new ButtonBuilder()
+                  .setCustomId(`${customIdPrefix}_button_${result.id}`)
+                  .setLabel(`${title} (${date})`)
+                  .setStyle(ButtonStyle.Success)
+            }),
+        )
 
     const comment = additionalMessage || ''
+    const emoji = isSeries ? '📺' : '🎬'
     await interaction.reply({
-      content: 'Please select a result or try another search. 🎬\n ' + comment,
+      content: `Please select a result or try another search. ${emoji}\n ` + comment,
       components: [actionRow as any],
       ephemeral: isEphemeral,
     })
   } else {
     await interaction.reply({
       content:
-        'Sorry, there were no results matching your search. 😔 Please try again.',
+          'Sorry, there were no results matching your search. 😔 Please try again.',
       ephemeral: true,
     })
   }
@@ -173,24 +175,24 @@ export function convertScoreToStars(score: number, count?: number) {
 }
 
 export function createReviewEmbed(
-  review: MovieReview,
-  movie: SearchResult,
-  avatar: string,
+    review: MovieReview,
+    movie: SearchResult,
+    avatar: string,
 ) {
   return new EmbedBuilder()
-    .setColor('#01b4e4')
-    .setTitle(`${movie.title} review by ${review.username}`)
-    .setAuthor({
-      name: review.username,
-      iconURL: avatar,
-    })
-    .setDescription(review.comment)
-    .setImage(movie.image)
-    .addFields([
-      {
-        name: 'Release Date',
-        value: dayjs(movie.date).format('MMMM D, YYYY'),
-      },
-      { name: 'Score', value: convertScoreToStars(review.score) },
-    ])
+      .setColor('#01b4e4')
+      .setTitle(`${movie.title} review by ${review.username}`)
+      .setAuthor({
+        name: review.username,
+        iconURL: avatar,
+      })
+      .setDescription(review.comment)
+      .setImage(movie.image)
+      .addFields([
+        {
+          name: 'Release Date',
+          value: dayjs(movie.date).format('MMMM D, YYYY'),
+        },
+        { name: 'Score', value: convertScoreToStars(review.score) },
+      ])
 }

@@ -1,5 +1,5 @@
 import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js'
-import { replyWithMovieResults } from './movies/utils'
+import { replyWithResults } from './movies/utils'
 import { handleSubcommand } from '../utils/helpers'
 
 const commands = {
@@ -36,12 +36,7 @@ const subcommandExecutors = {
 async function searchMovieReview(interaction: ChatInputCommandInteraction) {
   const user =
     interaction.options.getUser('reviewer')?.id ?? interaction.user.id
-  await replyWithMovieResults(
-    interaction,
-    `searchMovieReview_${user}`,
-    '',
-    true,
-  )
+  await replyWithResults(interaction, `searchMovieReview_${user}`, '', true)
 }
 
 export default commands

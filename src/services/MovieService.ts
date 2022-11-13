@@ -8,7 +8,8 @@ dotenv.config()
 export default class MovieService extends Service {
   constructor() {
     const token = process.env.MOVIE_TOKEN ?? ''
-    if (!token) throw new Error('Missing TMDB API Authorization token')
+    if (!token)
+      throw new Error('Missing or incorrect TMDB API Authorization token')
     const baseURL = 'https://api.themoviedb.org/3'
 
     super(baseURL, token)
@@ -32,7 +33,7 @@ export default class MovieService extends Service {
         throw err
       })
 
-    // Get first three results
+    // Get first five results
     return results.slice(0, 5).map((result) => ({
       id: result.id.toString(),
       title: result.title,
@@ -59,5 +60,33 @@ export default class MovieService extends Service {
       image: `https://www.themoviedb.org/t/p/w600_and_h900_bestv2${result.poster_path}`,
       date: result.release_date,
     }
+  }
+
+  async searchSeries(query: string): Promise<SearchResult[]> {
+    const endpoint = `${this.baseURL}/search/tv`
+    const params: BodyData = { query }
+
+    const results: Array<any> = await needle(
+      'get',
+      endpoint,
+      params,
+      this.headers,
+    )
+      .then((response) => {
+        if (response.body.error) throw new Error(response.body.error)
+        return response.body.results
+      })
+      .catch((err) => {
+        throw err
+      })
+
+    // Get first five results
+    return results.slice(0, 5).map((result) => ({
+      id: result.id.toString(),
+      title: result.name,
+      description: result.overview,
+      image: `https://www.themoviedb.org/t/p/w600_and_h900_bestv2${result.poster_path}`,
+      date: result.first_air_date,
+    }))
   }
 }

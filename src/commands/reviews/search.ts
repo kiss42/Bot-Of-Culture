@@ -1,5 +1,5 @@
 import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js'
-import { replyWithMovieResults } from './movies/utils'
+import { replyWithResults } from './movies/utils'
 import { handleSubcommand } from '../utils/helpers'
 
 const command = {
@@ -40,14 +40,12 @@ const subcommandExecutors = {
 
 async function searchMovie(interaction: ChatInputCommandInteraction) {
   const commandPrefix = 'selectMovie'
-  await replyWithMovieResults(interaction, commandPrefix, '', false)
+  await replyWithResults(interaction, commandPrefix, '', false)
 }
 
 async function searchSeries(interaction: ChatInputCommandInteraction) {
-  // const commandPrefix = 'selectSeries'
-  await interaction.reply({
-    content: 'I\'m not quite ready for that command yet!',
-  })
+  const commandPrefix = 'selectSeries'
+  await replyWithResults(interaction, commandPrefix, '', false, true)
 }
 
 export default command
