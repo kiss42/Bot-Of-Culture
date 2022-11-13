@@ -6,7 +6,7 @@ import {
 } from 'discord.js'
 import { SlashCommand, SubcommandExecutors } from '../utils/types'
 import { toNormalDate } from '../utils/helpers'
-import { handleSubcommand } from './movies/utils/helpers'
+import { handleSubcommand } from './utils/helpers'
 
 const command: SlashCommand = {
   data: new SlashCommandBuilder()

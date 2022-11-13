@@ -16,9 +16,9 @@ import {
 } from 'discord.js'
 import { reviewChoices } from './choices'
 import { MovieReview, Prisma } from '@prisma/client'
-import { BotClient } from '../../../Bot'
+import { BotClient } from '../../../../Bot'
 import dayjs from 'dayjs'
-import { SearchResult } from '../../../utils/types'
+import { SearchResult } from '../../../../utils/types'
 
 export async function promptReview(interaction: MessageComponentInteraction) {
   const movieId = interaction.customId.replace('reviewMovie_button_', '')
