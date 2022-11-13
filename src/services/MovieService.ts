@@ -1,24 +1,20 @@
 import dotenv from 'dotenv'
-import needle, { BodyData, NeedleOptions } from 'needle'
-import { MovieSearchResult } from 'src/utils/types'
+import needle, { BodyData } from 'needle'
+import { SearchResult } from 'src/utils/types'
+import Service from './Service'
 
 dotenv.config()
 
-export default class MovieService {
-  private authHeader: { Authorization: string }
-  private headers: NeedleOptions
-  private baseURL: string
-
+export default class MovieService extends Service {
   constructor() {
     const token = process.env.MOVIE_TOKEN ?? ''
     if (!token) throw new Error('Missing TMDB API Authorization token')
+    const baseURL = 'https://api.themoviedb.org/3'
 
-    this.authHeader = { Authorization: `Bearer ${token}` }
-    this.headers = { headers: this.authHeader }
-    this.baseURL = 'https://api.themoviedb.org/3'
+    super(baseURL, token)
   }
 
-  async search(query: string): Promise<MovieSearchResult[]> {
+  async search(query: string): Promise<SearchResult[]> {
     const endpoint = `${this.baseURL}/search/movie`
     const params: BodyData = { query }
 
@@ -46,7 +42,7 @@ export default class MovieService {
     }))
   }
 
-  async getById(id: string): Promise<MovieSearchResult> {
+  async getById(id: string): Promise<SearchResult> {
     const endpoint = `${this.baseURL}/movie/${id}`
 
     const result: any = await needle('get', endpoint, null, this.headers)

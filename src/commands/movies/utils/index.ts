@@ -18,7 +18,7 @@ import { reviewChoices } from './choices'
 import { MovieReview, Prisma } from '@prisma/client'
 import { BotClient } from '../../../Bot'
 import dayjs from 'dayjs'
-import { MovieSearchResult } from '../../../utils/types'
+import { SearchResult } from '../../../utils/types'
 
 export async function promptReview(interaction: MessageComponentInteraction) {
   const movieId = interaction.customId.replace('reviewMovie_button_', '')
@@ -174,7 +174,7 @@ export function convertScoreToStars(score: number, count?: number) {
 
 export function createReviewEmbed(
   review: MovieReview,
-  movie: MovieSearchResult,
+  movie: SearchResult,
   avatar: string,
 ) {
   return new EmbedBuilder()
