@@ -1,6 +1,6 @@
 import dotenv from 'dotenv'
 import needle, { BodyData } from 'needle'
-import { SearchResult } from 'src/utils/types'
+import { SearchResult, SeriesSearchResult } from 'src/utils/types'
 import Service from './Service'
 
 dotenv.config()
@@ -43,25 +43,6 @@ export default class MovieService extends Service {
     }))
   }
 
-  async getById(id: string): Promise<SearchResult> {
-    const endpoint = `${this.baseURL}/movie/${id}`
-
-    const result: any = await needle('get', endpoint, null, this.headers)
-      .then((response) => response.body)
-      .catch((err) => {
-        throw err
-      })
-
-    // Extract the only info we care about
-    return {
-      id: result.id.toString(),
-      title: result.title,
-      description: result.overview,
-      image: `https://www.themoviedb.org/t/p/w600_and_h900_bestv2${result.poster_path}`,
-      date: result.release_date,
-    }
-  }
-
   async searchSeries(query: string): Promise<SearchResult[]> {
     const endpoint = `${this.baseURL}/search/tv`
     const params: BodyData = { query }
@@ -88,5 +69,48 @@ export default class MovieService extends Service {
       image: `https://www.themoviedb.org/t/p/w600_and_h900_bestv2${result.poster_path}`,
       date: result.first_air_date,
     }))
+  }
+
+  async getById(id: string): Promise<SearchResult> {
+    const endpoint = `${this.baseURL}/movie/${id}`
+
+    const result: any = await needle('get', endpoint, null, this.headers)
+      .then((response) => response.body)
+      .catch((err) => {
+        throw err
+      })
+
+    // Extract the only info we care about
+    return {
+      id: result.id.toString(),
+      title: result.title,
+      description: result.overview,
+      image: `https://www.themoviedb.org/t/p/w600_and_h900_bestv2${result.poster_path}`,
+      date: result.release_date,
+    }
+  }
+
+  async getSeriesById(id: string): Promise<SeriesSearchResult> {
+    const endpoint = `${this.baseURL}/tv/${id}`
+
+    const result: any = await needle('get', endpoint, null, this.headers)
+      .then((response) => response.body)
+      .catch((err) => {
+        throw err
+      })
+
+    // Extract specific series info we care about
+    return {
+      id: result.id.toString(),
+      title: result.name,
+      description: result.overview,
+      image: `https://www.themoviedb.org/t/p/w600_and_h900_bestv2${result.poster_path}`,
+      date: result.first_air_date,
+      lastAirDate: result.last_air_date,
+      episodes: result.number_of_episodes.toString(),
+      episodeLength: result.episode_run_time[0].toString(),
+      seasons: result.number_of_seasons.toString(),
+      status: result.status,
+    }
   }
 }
