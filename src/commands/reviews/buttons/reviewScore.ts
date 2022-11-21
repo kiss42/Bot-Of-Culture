@@ -22,12 +22,14 @@ const replyOptions: APISelectMenuOption[] = [
 ]
 
 async function reviewScore(interaction: SelectMenuInteraction) {
-  const movieId = interaction.customId.replace('reviewScore_button_', '')
+  const params = interaction.customId.split('_')
+  const movieId = params[3]
+  const type = params[1]
   const score = interaction.values[0]
 
   const actionRow = new ActionRowBuilder().addComponents(
     new SelectMenuBuilder()
-      .setCustomId(`addComment_button_${movieId}_${score}`)
+      .setCustomId(`addComment_${type}_button_${movieId}_${score}`)
       .addOptions(...replyOptions),
   )
 

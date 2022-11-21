@@ -1,5 +1,5 @@
 import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js'
-import { replyWithResults } from './movies/utils'
+import { replyWithResults } from './utils'
 import { handleSubcommand } from '../utils/helpers'
 
 const command = {

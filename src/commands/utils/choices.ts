@@ -9,7 +9,7 @@ export const reviewChoices: APISelectMenuOption[] = [
   {
     label: '⭐️️⭐️️',
     value: '2',
-    description: 'Watchable, but does have some flaws.',
+    description: 'Barely watchable, and has a lot of flaws.',
   },
   {
     label: '⭐️️⭐️️⭐️',

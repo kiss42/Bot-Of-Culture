@@ -1,7 +1,7 @@
 import { MessageComponentInteraction } from 'discord.js'
 import { BotClient } from 'src/Bot'
 import { MovieReview } from '@prisma/client'
-import { createReviewEmbed } from '../utils'
+import { createReviewEmbed } from '../../utils'
 
 const commands = {
   data: { name: 'searchMovieReview' },

@@ -6,7 +6,7 @@ import {
   MessageComponentInteraction,
 } from 'discord.js'
 import { BotClient } from 'src/Bot'
-import { convertScoreToStars } from '../movies/utils'
+import { convertScoreToStars } from '../utils'
 import {
   IMovieReview,
   IReview,
@@ -47,7 +47,7 @@ async function getSearchResultInfo(interaction: MessageComponentInteraction) {
 
     const result = await getByIdForType(resultType, id, bot)
 
-    let commandPrefix = 'reviewMovie'
+    let commandPrefix = 'startReview_movie'
     let resultInfoEmbed = new EmbedBuilder()
       .setColor('#01b4e4')
       .setTitle(result.title)
@@ -62,7 +62,7 @@ async function getSearchResultInfo(interaction: MessageComponentInteraction) {
       ])
 
     if (resultType === 'series') {
-      commandPrefix = 'reviewSeries'
+      commandPrefix = 'startReview_series'
       const { episodes, episodeLength, seasons, lastAirDate, status } =
         result as SeriesSearchResult
       resultInfoEmbed = resultInfoEmbed.addFields([

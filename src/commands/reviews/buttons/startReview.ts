@@ -2,7 +2,7 @@ import { MessageComponentInteraction } from 'discord.js'
 import { promptReview } from '../utils'
 
 const command = {
-  data: { name: 'reviewMovie' },
+  data: { name: 'startReview' },
   execute: handleReview,
 }
 
