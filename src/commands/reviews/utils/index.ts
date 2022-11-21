@@ -177,7 +177,7 @@ export async function saveReview(
     )
 
     await interaction.channel.send({
-      content: `<@${review.userId}> just left a review for ${type}!`,
+      content: `<@${review.userId}> just left a review for a ${type}!`,
       embeds: [reviewInfoEmbed as any],
       components: [],
     })
@@ -239,7 +239,12 @@ export async function replyWithResults(
 
 export function convertScoreToStars(score: number, count?: number) {
   const suffix = count ? ` (${count})` : ''
-  return '⭐️'.repeat(score) + '▪️'.repeat(5 - score) + suffix
+  return (
+    '⭐️'.repeat(score) +
+    '▪️'.repeat(5 - score) +
+    ` | *${reviewChoices[score - 1].description}*` +
+    suffix
+  )
 }
 
 export function createReviewEmbed(
@@ -247,12 +252,10 @@ export function createReviewEmbed(
   reviewTarget: SearchResult,
   avatar: string,
 ) {
-  const formattedScore = `${convertScoreToStars(review.score)} | *${
-    reviewChoices[review.score - 1].description
-  }*`
+  const formattedScore = `${convertScoreToStars(review.score)}`
   return new EmbedBuilder()
     .setColor('#01b4e4')
-    .setTitle(`${reviewTarget.title} review by ${review.username}`)
+    .setTitle(`*"${reviewTarget.title}"* review by ${review.username}`)
     .setAuthor({
       name: review.username,
       iconURL: avatar,
