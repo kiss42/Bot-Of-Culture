@@ -122,6 +122,7 @@ export async function promptReviewComment(interaction: SelectMenuInteraction) {
     .addComponents(actionRow)
 
   await interaction.showModal(modal)
+  await interaction.deleteReply()
 }
 
 export async function saveReview(
@@ -238,7 +239,7 @@ export async function replyWithResults(
 
 export function convertScoreToStars(score: number, count?: number) {
   const suffix = count ? ` (${count})` : ''
-  return '⭐️'.repeat(score) + suffix
+  return '⭐️'.repeat(score) + '▪️'.repeat(5 - score) + suffix
 }
 
 export function createReviewEmbed(
@@ -246,6 +247,9 @@ export function createReviewEmbed(
   reviewTarget: SearchResult,
   avatar: string,
 ) {
+  const formattedScore = `${convertScoreToStars(review.score)} | *${
+    reviewChoices[review.score - 1].description
+  }*`
   return new EmbedBuilder()
     .setColor('#01b4e4')
     .setTitle(`${reviewTarget.title} review by ${review.username}`)
@@ -256,10 +260,16 @@ export function createReviewEmbed(
     .setDescription(review.comment)
     .setImage(reviewTarget.image)
     .addFields([
+      { name: 'Score', value: formattedScore },
       {
         name: 'Release Date',
         value: toNormalDate(reviewTarget.date),
+        inline: true,
       },
-      { name: 'Score', value: convertScoreToStars(review.score) },
+      {
+        name: 'Description',
+        value: reviewTarget.description,
+        inline: true,
+      },
     ])
 }

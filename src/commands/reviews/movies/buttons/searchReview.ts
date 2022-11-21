@@ -1,33 +1,41 @@
 import { MessageComponentInteraction } from 'discord.js'
 import { BotClient } from 'src/Bot'
-import { MovieReview } from '@prisma/client'
 import { createReviewEmbed } from '../../utils'
 
 const commands = {
-  data: { name: 'searchMovieReview' },
+  data: { name: 'searchReview' },
   execute: getMovieReview,
 }
 
 async function getMovieReview(interaction: MessageComponentInteraction) {
   const bot = interaction.client as BotClient
   const params = interaction.customId.split('_')
-  const movieId = params[3]
-  const userId = params[1]
+  const type = params[1]
+  const userId = params[2]
+  const targetId = params[4]
   const guildId = interaction.guildId
 
   await interaction.deferUpdate()
 
-  const review: MovieReview = await bot.db.movieReview.findFirst({
-    where: { guildId, movieId, userId },
-  })
+  let review
+  if (type === 'movie')
+    review = await bot.db.movieReview.findFirst({
+      where: { guildId, movieId: targetId, userId },
+    })
+  else
+    review = await bot.db.seriesReview.findFirst({
+      where: { guildId, seriesId: targetId, userId },
+    })
 
   if (review) {
-    const movieInfo = await bot.movies.getById(review.movieId)
+    let targetInfo
+    if (type === 'movie') targetInfo = await bot.movies.getById(targetId)
+    else targetInfo = await bot.movies.getSeriesById(targetId)
     const userAvatar = bot.guilds
       .resolve(guildId)
       .members.resolve(userId)
       .user.avatarURL()
-    const reviewEmbed = createReviewEmbed(review, movieInfo, userAvatar)
+    const reviewEmbed = createReviewEmbed(review, targetInfo, userAvatar)
     interaction.channel.send({
       content: `Review requested by <@${interaction.user.id}>`,
       embeds: [reviewEmbed as any],
@@ -38,7 +46,7 @@ async function getMovieReview(interaction: MessageComponentInteraction) {
     })
   } else {
     await interaction.editReply({
-      content: 'Sorry, no review of that movie was found for that user.',
+      content: `Sorry, no review of that ${type} was found for that user.`,
       components: [],
     })
   }
