@@ -1,6 +1,6 @@
 import { MessageComponentInteraction } from 'discord.js'
 import { BotClient } from 'src/Bot'
-import { createReviewEmbed } from '../../utils'
+import { createReviewEmbed } from '../utils'
 
 const commands = {
   data: { name: 'searchReview' },
