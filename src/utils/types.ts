@@ -5,6 +5,8 @@ import {
   SlashCommandSubcommandsOnlyBuilder,
 } from 'discord.js'
 
+export type CollectionName = 'movie' | 'series'
+
 export interface ActiveGame {
   id: string
   choice: string

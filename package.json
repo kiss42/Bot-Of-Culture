@@ -14,11 +14,11 @@
     "start": "node ./dist/app.js",
     "dev": "ts-node-dev src/app.ts",
     "dev:tutorial": "nodemon src/tutorial/legacyApp.js",
+    "build": "tsc -p .",
     "prisma:generate": "prisma generate",
     "deploy-commands": "ts-node scripts/deployCommands.ts",
     "deploy-commands:global": "ts-node scripts/deployCommands.ts global",
-    "deploy:prod": "gcloud app deploy app.yml",
-    "gcp-build": "tsc -p ."
+    "deploy:prod": "gcloud app deploy app.yml"
   },
   "devDependencies": {
     "@types/needle": "^2.5.3",
