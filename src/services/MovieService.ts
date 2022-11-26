@@ -99,6 +99,8 @@ export default class MovieService extends Service {
         throw err
       })
 
+    console.dir(result)
+
     // Extract specific series info we care about
     return {
       id: result.id.toString(),
@@ -107,9 +109,9 @@ export default class MovieService extends Service {
       image: `https://www.themoviedb.org/t/p/w600_and_h900_bestv2${result.poster_path}`,
       date: result.first_air_date,
       lastAirDate: result.last_air_date,
-      episodes: result.number_of_episodes.toString(),
-      episodeLength: result.episode_run_time[0].toString(),
-      seasons: result.number_of_seasons.toString(),
+      episodes: result.number_of_episodes?.toString() || 'n/a',
+      episodeLength: result.episode_run_time[0]?.toString() || 'n/a',
+      seasons: result.number_of_seasons?.toString() || 'n/a',
       status: result.status,
     }
   }
