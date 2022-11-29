@@ -1,5 +1,5 @@
 import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js'
-import { replyWithResults } from './movies/utils'
+import { replyWithResults } from './utils'
 import { handleSubcommand } from '../utils/helpers'
 
 const command = {
@@ -39,12 +39,12 @@ const subcommandExecutors = {
 }
 
 async function searchMovie(interaction: ChatInputCommandInteraction) {
-  const commandPrefix = 'selectMovie'
+  const commandPrefix = 'searchSelect_movie'
   await replyWithResults(interaction, commandPrefix, '', false)
 }
 
 async function searchSeries(interaction: ChatInputCommandInteraction) {
-  const commandPrefix = 'selectSeries'
+  const commandPrefix = 'searchSelect_series'
   await replyWithResults(interaction, commandPrefix, '', false, true)
 }
 

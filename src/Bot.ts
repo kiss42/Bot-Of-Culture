@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client'
 import { Client, ClientOptions, Collection } from 'discord.js'
 import MovieService from './services/MovieService'
-import { SlashCommand } from './utils/types'
+import { CollectionName, SlashCommand } from './utils/types'
 
 export class BotClient extends Client {
   public commands: Collection<string, SlashCommand>
@@ -13,6 +13,15 @@ export class BotClient extends Client {
     this.initDatabase().then(() => {
       this.movies = new MovieService()
     })
+  }
+
+  getCollection(name: CollectionName) {
+    const collections = {
+      movie: this.db.movieReview,
+      series: this.db.seriesReview,
+    }
+
+    return collections[name]
   }
 
   private async initDatabase() {

@@ -30,3 +30,16 @@ model MovieReview {
 
   @@index([movieId, guildId, userId])
 }
+
+model SeriesReview {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  seriesId String
+  guildId String
+  score Int
+  comment String?
+  userId String
+  username String
+  createdAt DateTime @default(now()) @map("_createdAt")
+
+  @@index([seriesId, guildId, userId])
+}
