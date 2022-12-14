@@ -1,3 +1,4 @@
+import src from '@chakra-ui/icon/dist/declarations/src'
 import { APISelectMenuOption } from 'discord.js'
 
 export const reviewChoices: APISelectMenuOption[] = [
